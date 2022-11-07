@@ -8,15 +8,11 @@ import matplotlib.pyplot as plt
 import random
 
 cwd = os.getcwd()
-image = np.load(f'{cwd}\Data_subset\B02_s1_w16F89C55C-7808-4136-82E4-E066F8E3CB10\B02_s1_w16F89C55C-7808-4136-82E4-E066F8E3CB10_0.npy')
-
-#print(image)
-#print(image.shape)
-
 single_img_path = f'{cwd}\Data_subset\B02_s1_w16F89C55C-7808-4136-82E4-E066F8E3CB10\B02_s1_w16F89C55C-7808-4136-82E4-E066F8E3CB10'
 
-idx = random.sample(range(1, 200), 9)
+idx = random.sample(range(1, 200), 9) 
 fig, axs = plt.subplots(3, 3)
+
 for i in range(3):
     for j in range(3):
         single_cell_image = np.load(single_img_path + '_{}.npy'.format(idx[(i-1)*3+j]))
