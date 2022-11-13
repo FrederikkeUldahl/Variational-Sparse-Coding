@@ -18,8 +18,8 @@ import random
 import math
 
 #Load metadata-----------
-dataPath = '..\..\data\singh_cp_pipeline_singlecell_images'
-metaDataPath = '..\data'
+dataPath = '..\..\..\data\singh_cp_pipeline_singlecell_images'
+metaDataPath = '..\..\data'
 
 #reading metadata csv
 metadata = pd.read_csv(metaDataPath + '\metadata.csv', sep = ';', header = 0)
@@ -43,6 +43,7 @@ def get_subset(moa, amount): #not implemented yet
     subset = moas.iloc[idx]
     return(subset)
 
+#get a specific sized dataset from the wanted moa lables
 def get_subset_from(moas, size):
     amount = math.ceil(size/len(moas))
     dataset = pd.DataFrame()
@@ -53,7 +54,7 @@ def get_subset_from(moas, size):
     return(dataset)
 
 #collecting one dataset of all moas
-dataset = get_subset_from(moa_types, 100000)
+dataset = get_subset_from(moa_types, 10000)
 print("full dataset set: {}".format(dataset.shape))
 
 data_tree = get_subset_from(moa_types[0:3], 30)
