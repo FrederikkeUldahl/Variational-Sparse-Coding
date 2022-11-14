@@ -4,10 +4,8 @@ import pandas as pd
 from PIL import Image
 import matplotlib.pyplot as plt
 import random
-pd.set_option('display.max_rows', 500)
-pd.set_option('display.max_columns', 300)
 
-single_img_path = 'data\B02_s1_w16F89C55C-7808-4136-82E4-E066F8E3CB10\B02_s1_w16F89C55C-7808-4136-82E4-E066F8E3CB10'
+single_img_path = 'Data_subset\B02_s1_w16F89C55C-7808-4136-82E4-E066F8E3CB10\B02_s1_w16F89C55C-7808-4136-82E4-E066F8E3CB10'
 
 idx = random.sample(range(1, 200), 9) 
 fig, axs = plt.subplots(3, 3)
