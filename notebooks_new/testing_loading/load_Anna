@@ -1,7 +1,0 @@
-import numpy as np
-from torch.utils.data import DataLoader
-
-directory = 'data\B02_s1_w16F89C55C-7808-4136-82E4-E066F8E3CB10\B02_s1_w16F89C55C-7808-4136-82E4-E066F8E3CB10'
-
-image1 = np.load(directory + '_0.npy')
-print(image1.shape)

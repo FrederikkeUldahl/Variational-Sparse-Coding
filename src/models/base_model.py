@@ -1,12 +1,42 @@
+from glob import glob
+from pathlib import Path
+
+import pandas as pd
 import torch
 from torchvision.utils import save_image
-from pathlib import Path
-from glob import glob
-import pandas as pd
 from tqdm import tqdm
 
-from ..logger import Logger
+############################
+#from ..logger import Logger
+# Manually importing Logger class from logger.py
+class Logger(object):
+    
+    def __init__(self, log_dir ):
+        """Create a summary writer logging to log_dir."""
+        
+        self.train_writer = tf.summary.FileWriter(log_dir + "/train")
+        self.test_writer = tf.summary.FileWriter(log_dir + "/eval")
 
+        self.loss = tf.Variable(0.0)
+        tf.summary.scalar("loss", self.loss)
+
+        self.merged = tf.summary.merge_all()
+
+        self.session = tf.InteractiveSession()
+        self.session.run(tf.global_variables_initializer())
+
+
+    def scalar_summary(self, train_loss, test_loss, step):
+        """Log a scalar variable."""
+
+        summary = self.session.run(self.merged, {self.loss: train_loss})
+        self.train_writer.add_summary(summary, step) 
+        self.train_writer.flush()
+
+        summary = self.session.run(self.merged, {self.loss: test_loss})
+        self.test_writer.add_summary(summary, step) 
+        self.test_writer.flush()
+###########
 class VariationalBaseModel():
     def __init__(self, dataset, width, height, channels, latent_sz, 
                  learning_rate, device, log_interval, normalize=False, 

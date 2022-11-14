@@ -1,7 +1,10 @@
 import torch
-
-from utils import get_argparser, get_datasets
+from loading_our_data import train_loader, test_loader
+from utils import get_argparser#, get_datasets
 from models.vae import VariationalAutoEncoder
+import tensorflow as tf
+import numpy as np
+import scipy.misc 
 
 if __name__ == "__main__":    
     parser = get_argparser('VAE Example')
@@ -18,9 +21,10 @@ if __name__ == "__main__":
     print(f'Using {device} device...')
     
     #Load datasets
-    train_loader, test_loader, (width, height, channels) = get_datasets(args.dataset, 
-                                                                        args.batch_size,
-                                                                        args.cuda)
+    #train_loader, test_loader, (width, height, channels) = get_datasets(args.dataset, args.batch_size, args.cuda)
+
+    # Load OUR dataset
+    train_loader, test_loader, (width, height, channels) = train_loader, test_loader, (68, 68, 3)
     
     # Tune the learning rate (All training rates used were between 0.001 and 0.01)
     vae = VariationalAutoEncoder(args.dataset, width, height, channels, 

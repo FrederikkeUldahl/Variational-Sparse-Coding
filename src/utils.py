@@ -1,7 +1,7 @@
 import argparse, os
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
-from .datasets import CelebA, DSprites
+#from .datasets import CelebA, DSprites
 
 
 def get_argparser(description):
