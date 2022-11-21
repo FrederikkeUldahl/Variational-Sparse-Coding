@@ -2,7 +2,8 @@ import torch
 from torch import nn, optim
 from torch.nn import functional as F
 
-from .base_model import VariationalBaseModel
+#from .base_model import VariationalBaseModel
+import base_model
 
 # Variational AutoEncoder Model 
 class VAE(nn.Module):
@@ -49,7 +50,7 @@ class VAE(nn.Module):
         return self.decode(z), mu, logvar
 
     
-class VariationalAutoEncoder(VariationalBaseModel):
+class VariationalAutoEncoder(base_model.VariationalBaseModel):
     def __init__(self, dataset, width, height, channels, hidden_sz, latent_sz, 
                  learning_rate, device, log_interval, normalize):
         super().__init__(dataset, width, height, channels, latent_sz,

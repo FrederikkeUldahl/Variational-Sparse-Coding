@@ -5,6 +5,9 @@ import pandas as pd
 import torch
 from torchvision.utils import save_image
 from tqdm import tqdm
+import tensorflow as tf
+import numpy as np
+#import scipy.misc 
 
 ############################
 #from ..logger import Logger
@@ -14,13 +17,16 @@ class Logger(object):
     def __init__(self, log_dir ):
         """Create a summary writer logging to log_dir."""
         
-        self.train_writer = tf.summary.FileWriter(log_dir + "/train")
-        self.test_writer = tf.summary.FileWriter(log_dir + "/eval")
+        ##self.train_writer = tf.summary.FileWriter(log_dir + "/train")
+        self.train_writer = tf.summary.create_file_writer(log_dir + "/train")
+        ##self.test_writer = tf.summary.FileWriter(log_dir + "/eval")
+        self.test_writer = tf.summary.create_file_writer(log_dir + "/eval")
 
         self.loss = tf.Variable(0.0)
         tf.summary.scalar("loss", self.loss)
 
-        self.merged = tf.summary.merge_all()
+        ##self.merged = tf.summary.merge_all()
+        self.merged = tf.compat.v1.summary.merge_all()
 
         self.session = tf.InteractiveSession()
         self.session.run(tf.global_variables_initializer())
@@ -189,13 +195,13 @@ class VariationalBaseModel():
         name = self.model.__class__.__name__
         run_name = f'{name}_{self.dataset}_{start_epoch}_{epochs}_' \
                    f'{self.latent_sz}_{str(self.lr).replace(".", "-")}'
-        logger = Logger(f'{logs_path}/{run_name}')
+        #logger = Logger(f'{logs_path}/{run_name}')
         logging_func(f'Training {name} model...')
         for epoch in range(start_epoch, start_epoch + epochs):
             train_loss = self.train(train_loader, epoch, logging_func)
             test_loss = self.test(test_loader, epoch, logging_func)
             # Store log
-            logger.scalar_summary(train_loss, test_loss, epoch)
+            #logger.scalar_summary(train_loss, test_loss, epoch)
             # Optional update
             self.update_()
             # For each report interval store model and save images

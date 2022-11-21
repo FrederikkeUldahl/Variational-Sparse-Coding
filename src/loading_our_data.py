@@ -13,7 +13,7 @@ data = pickle.load(data_pickle)
 
 # Class for dataset
 class BBBC(Dataset):
-    def __init__(self, annotations_file,typeFlag, transform=None, target_transform=None):
+    def __init__(self, annotations_file, typeFlag, transform=None, target_transform=None):
         self.transform = transform
         self.target_transform = target_transform
         
@@ -40,6 +40,9 @@ class BBBC(Dataset):
         if self.target_transform:
             label = self.target_transform(label)
         
+        image = image.view(-1).type(torch.FloatTensor)
+        image = (image-image.min())/(image.max()-image.min())
+
         return image, label
 
 dset_train = BBBC(data,"train")
@@ -49,8 +52,9 @@ batch_size = 30
 
 train_loader = DataLoader(dset_train,batch_size=batch_size)
 test_loader = DataLoader(dset_test,batch_size=batch_size)
+#(width, height, channels) = (68, 68, 3)
 
-print(type(dset_train))       # <class '__main__.BBBC'>
-print(type(dset_train[0]))    # <class 'tuple'>
-print(type(dset_train[0][0])) # <class 'torch.Tensor'>
-print(type(dset_train[0][1])) # <class 'int'>, but currently it is <class 'str'>
+# print(type(dset_train))       # <class '__main__.BBBC'>
+# print(type(dset_train[0]))    # <class 'tuple'>
+# print(type(dset_train[0][0])) # <class 'torch.Tensor'>
+# print(type(dset_train[0][1])) # <class 'int'>, but currently it is <class 'str'>

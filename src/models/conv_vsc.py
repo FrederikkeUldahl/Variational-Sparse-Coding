@@ -4,8 +4,8 @@ import torch
 from torch import nn, optim
 from torch.nn import functional as F
 
+#import base_model
 from .base_model import VariationalBaseModel
-
 
 # Convolutional Variational Sparse Coding Model 
 class ConvVSC(nn.Module):
