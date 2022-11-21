@@ -4,7 +4,7 @@ import torch
 from torch import nn, optim
 from torch.nn import functional as F
 
-from .base_model import VariationalBaseModel
+import base_model
 
 # Convolutional Variational AutoEncoder Model 
 class ConvVAE(nn.Module):
@@ -94,7 +94,7 @@ class ConvVAE(nn.Module):
         self.beta += self.beta_delta
 
     
-class ConvolutionalVariationalAutoEncoder(VariationalBaseModel):
+class ConvolutionalVariationalAutoEncoder(base_model.VariationalBaseModel):
     def __init__(self, dataset, width, height, channels, kernel_szs,
                  hidden_sz, latent_sz, learning_rate,
                  device, log_interval, normalize, flatten, **kwargs):

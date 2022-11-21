@@ -10,7 +10,7 @@ import numpy as np
 import os
 
 metaDataPath_100000 = 'dataset_100000.csv'
-dataPath = '\singh_cp_pipeline_singlecell_images'
+#dataPath = '\singh_cp_pipeline_singlecell_images'
 print("path: {}".format(os.getcwd())) #this should be in 'notebooks_new\testing_loading' directory. If not change the remaining directories to fit yours
 os.chdir('..\..\data\Subset_CSVs')
 print("new path: {}".format(os.getcwd())) #This should be in 'Subset_CSVs' directory

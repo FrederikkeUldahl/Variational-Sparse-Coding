@@ -3,6 +3,9 @@ from pathlib import Path
 
 import pandas as pd
 import torch
+import tensorflow as tf
+import numpy as np
+import scipy.misc
 from torchvision.utils import save_image
 from tqdm import tqdm
 
@@ -14,28 +17,38 @@ class Logger(object):
     def __init__(self, log_dir ):
         """Create a summary writer logging to log_dir."""
         
-        self.train_writer = tf.summary.FileWriter(log_dir + "/train")
-        self.test_writer = tf.summary.FileWriter(log_dir + "/eval")
+        #self.train_writer = tf.summary.FileWriter(log_dir + "/train")
+        #self.test_writer = tf.summary.FileWriter(log_dir + "/eval")
+        self.train_writer = tf.summary.create_file_writer(log_dir + "/train")
+        self.test_writer = tf.summary.create_file_writer(log_dir + "/eval")
 
         self.loss = tf.Variable(0.0)
         tf.summary.scalar("loss", self.loss)
+        tf.summary.flush(self.train_writer)
+        #self.train_writer.flush()
+        #self.train_writer.scalar("train loss", self.loss)
+        #self.merged = tf.summary.merge_all()
 
-        self.merged = tf.summary.merge_all()
-
-        self.session = tf.InteractiveSession()
-        self.session.run(tf.global_variables_initializer())
+        #self.session = tf.InteractiveSession()
+        #self.session.run(tf.global_variables_initializer())
 
 
     def scalar_summary(self, train_loss, test_loss, step):
         """Log a scalar variable."""
 
-        summary = self.session.run(self.merged, {self.loss: train_loss})
-        self.train_writer.add_summary(summary, step) 
-        self.train_writer.flush()
+        #summary = self.session.run(self.merged, {self.loss: train_loss})
+        #self.train_writer.add_summary(summary, step) 
+        tf.summary.scalar("train loss", train_loss, step)
+        tf.summary.flush(self.train_writer)
+        #self.train_writer.scalar("train loss", train_loss, step)
+        #self.train_writer.flush()
 
-        summary = self.session.run(self.merged, {self.loss: test_loss})
-        self.test_writer.add_summary(summary, step) 
-        self.test_writer.flush()
+        #summary = self.session.run(self.merged, {self.loss: test_loss})
+        #self.test_writer.add_summary(summary, step)
+        tf.summary.scalar("train loss", test_loss, step)
+        tf.summary.flush(self.test_writer)
+        #self.train_writer.scalar("test loss", test_loss, step)
+        #self.test_writer.flush()
 ###########
 class VariationalBaseModel():
     def __init__(self, dataset, width, height, channels, latent_sz, 
@@ -107,9 +120,13 @@ class VariationalBaseModel():
     
     # Run training iterations and report results
     def train(self, train_loader, epoch, logging_func=print):
+        print("training started")
         self.model.train()
+        print("model train has been run")
         train_loss = 0
+        print("trainloss 0")
         for batch_idx, (data, _) in enumerate(train_loader):
+            print("training new batch")
             data = self.transform(data).to(self.device)
             loss = self.step(data, train=True)
             train_loss += loss
@@ -119,6 +136,7 @@ class VariationalBaseModel():
                               len(train_loader.dataset),
                               100. * batch_idx / len(train_loader),
                               loss / len(data)))
+        print("forloop done")
 
         logging_func('====> Epoch: {} Average loss: {:.4f}'.format(
               epoch, train_loss / len(train_loader.dataset)))
@@ -192,8 +210,11 @@ class VariationalBaseModel():
         logger = Logger(f'{logs_path}/{run_name}')
         logging_func(f'Training {name} model...')
         for epoch in range(start_epoch, start_epoch + epochs):
+            print("training epoch")
             train_loss = self.train(train_loader, epoch, logging_func)
+            print("Done training epoch")
             test_loss = self.test(test_loader, epoch, logging_func)
+            print("Done testing epoch")
             # Store log
             logger.scalar_summary(train_loss, test_loss, epoch)
             # Optional update

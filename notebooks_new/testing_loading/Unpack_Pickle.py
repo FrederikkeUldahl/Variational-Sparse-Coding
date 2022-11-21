@@ -11,6 +11,8 @@ import numpy as np
 import os
 import pickle
 
+os.path.abspath(__file__)
+print(os.getcwd())
 os.chdir('..\..\data\Subset_CSVs')
 data_pickle = open ("data_1000_images.pkl", "rb")
 data_content = pickle.load(data_pickle)

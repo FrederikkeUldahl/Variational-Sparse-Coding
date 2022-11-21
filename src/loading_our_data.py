@@ -8,8 +8,8 @@ import torch
 from torch.utils.data import Dataset
 
 # Loading pickle file 
-data_pickle = open ('data\data_1000_images', 'rb')
-data = pickle.load(data_pickle)
+#data_pickle = open ('data\data_1000_images', 'rb')
+#data = pickle.load(data_pickle)
 
 # Class for dataset
 class BBBC(Dataset):
@@ -31,26 +31,30 @@ class BBBC(Dataset):
         return len(self.img_labels)
 
     def __getitem__(self, idx):
+        print("in getitem")
         image = self.img_labels.iloc[idx, 0]
         
         label = self.img_labels.iloc[idx, 1]
-        
+
         if self.transform:
             image = self.transform(image)
         if self.target_transform:
             label = self.target_transform(label)
         
+        image = image.view(-1).type(torch.FloatTensor)
+        image = (image-image.min())/(image.max()-image.min())
+
         return image, label
 
-dset_train = BBBC(data,"train")
-dset_test = BBBC(data,"test")
+#dset_train = BBBC(data,"train")
+#dset_test = BBBC(data,"test")
 
-batch_size = 30
+#batch_size = 30
 
-train_loader = DataLoader(dset_train,batch_size=batch_size)
-test_loader = DataLoader(dset_test,batch_size=batch_size)
+#train_loader = DataLoader(dset_train,batch_size=batch_size)
+#test_loader = DataLoader(dset_test,batch_size=batch_size)
 
-print(type(dset_train))       # <class '__main__.BBBC'>
-print(type(dset_train[0]))    # <class 'tuple'>
-print(type(dset_train[0][0])) # <class 'torch.Tensor'>
-print(type(dset_train[0][1])) # <class 'int'>, but currently it is <class 'str'>
+#print(type(dset_train))       # <class '__main__.BBBC'>
+#print(type(dset_train[0]))    # <class 'tuple'>
+#print(type(dset_train[0][0])) # <class 'torch.Tensor'>
+#print(type(dset_train[0][1])) # <class 'int'>, but currently it is <class 'str'>

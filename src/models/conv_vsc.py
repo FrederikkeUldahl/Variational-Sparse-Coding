@@ -4,7 +4,7 @@ import torch
 from torch import nn, optim
 from torch.nn import functional as F
 
-from .base_model import VariationalBaseModel
+import base_model
 
 
 # Convolutional Variational Sparse Coding Model 
@@ -109,7 +109,7 @@ class ConvVSC(nn.Module):
         self.beta += self.beta_delta
 
     
-class ConvolutionalVariationalSparseCoding(VariationalBaseModel):
+class ConvolutionalVariationalSparseCoding(base_model.VariationalBaseModel):
     def __init__(self, dataset, width, height, channels, kernel_szs,
                  hidden_sz, latent_sz, learning_rate, alpha,
                  device, log_interval, normalize, flatten, **kwargs):
