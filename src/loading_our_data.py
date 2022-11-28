@@ -6,6 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import torch
 from torch.utils.data import Dataset
+import pdb
 
 # Loading pickle file 
 #data_pickle = open ('data\data_1000_images', 'rb')
@@ -31,7 +32,6 @@ class BBBC(Dataset):
         return len(self.img_labels)
 
     def __getitem__(self, idx):
-        print("in getitem")
         image = self.img_labels.iloc[idx, 0]
         
         label = self.img_labels.iloc[idx, 1]
